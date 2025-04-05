@@ -1,0 +1,32 @@
+{
+  "name": "vega6-blogs-backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon src/index.js"
+
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aadil-rehman/vega-blogs-backend.git"
+  },
+  "keywords": [
+    "node",
+    "js"
+  ],
+  "author": "Aadil",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/aadil-rehman/vega-blogs-backend/issues"
+  },
+  "homepage": "https://github.com/aadil-rehman/vega-blogs-backend#readme",
+  "dependencies": {
+    "cloudinary": "^2.6.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^5.1.0",
+    "nodemon": "^3.1.9"
+  }
+}
