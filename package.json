@@ -22,12 +22,14 @@
   },
   "homepage": "https://github.com/aadil-rehman/vega-blogs-backend#readme",
   "dependencies": {
+    "bcrypt": "^5.1.1",
     "cloudinary": "^2.6.0",
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
     "express": "^5.1.0",
     "mongodb": "^6.15.0",
     "mongoose": "^8.13.2",
-    "nodemon": "^3.1.9"
+    "nodemon": "^3.1.9",
+    "validator": "^13.15.0"
   }
 }
