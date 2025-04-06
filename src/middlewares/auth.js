@@ -3,7 +3,6 @@ const User = require("../modules/user");
 
 const userAuth = async (req, res, next) => {
 	try {
-		//take the token from cookie
 		const { token } = req.cookies;
 
 		if (!token) {
