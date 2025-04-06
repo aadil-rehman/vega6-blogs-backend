@@ -23,10 +23,37 @@ blogRouter.post("/create", userAuth, async (req, res) => {
 	}
 });
 
+blogRouter.get("/view/:blogId", userAuth, async (req, res) => {
+	try {
+		const loggedInUser = req.user;
+		const blogId = req.params.blogId;
+		const blog = await Blog.findById(blogId);
+
+		if (blog.authorId.toString() !== loggedInUser._id.toString()) {
+			return res
+				.status(403)
+				.json({ error: "Unaithorized to access this blog" });
+		}
+		res.json({ message: "Blog fecthed successfully!", data: blog });
+	} catch (err) {
+		res.status(400).json({ Error: err.message });
+	}
+});
+
 blogRouter.get("/list", userAuth, async (req, res) => {
 	try {
 		const loggedInUser = req.user;
 		const blogs = await Blog.find({ authorId: loggedInUser._id });
+
+		res.json({ message: "Blogs fecthed successfully!", data: blogs });
+	} catch (err) {
+		res.status(400).json({ Error: err.message });
+	}
+});
+
+blogRouter.get("/feed", userAuth, async (req, res) => {
+	try {
+		const blogs = await Blog.find();
 
 		res.json({ message: "Blogs fecthed successfully!", data: blogs });
 	} catch (err) {
