@@ -14,9 +14,11 @@ app.use(cookieParser());
 
 const authRouter = require("./routes/auth");
 const blogRouter = require("./routes/blogs");
+const commentsRouter = require("./routes/comments");
 
 app.use("/", authRouter);
 app.use("/blog", blogRouter);
+app.use("/comments", commentsRouter);
 
 mongoDBconnect()
 	.then(() => {
