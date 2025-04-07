@@ -2,6 +2,7 @@ const express = require("express");
 const User = require("../modules/user");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const userAuth = require("../middlewares/auth");
 
 const authRouter = express.Router();
 
@@ -52,6 +53,15 @@ authRouter.post("/login", async (req, res) => {
 		}
 	} catch (err) {
 		res.status(400).send("Error: " + err.message);
+	}
+});
+
+authRouter.get("/profile", userAuth, async (req, res) => {
+	try {
+		const loggedInUser = req.user;
+		res.json({ message: "User fetched successfully!", data: loggedInUser });
+	} catch (err) {
+		res.status(400).json({ error: err.message });
 	}
 });
 
