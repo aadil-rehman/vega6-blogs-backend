@@ -26,7 +26,10 @@ blogRouter.post("/create", userAuth, async (req, res) => {
 blogRouter.get("/view/:blogId", userAuth, async (req, res) => {
 	try {
 		const blogId = req.params.blogId;
-		const blog = await Blog.findById(blogId);
+		const blog = await Blog.findById(blogId).populate(
+			"authorId",
+			"firstName lastName"
+		);
 
 		res.json({ message: "Blog fecthed successfully!", data: blog });
 	} catch (err) {
@@ -62,9 +65,9 @@ blogRouter.get("/feed", userAuth, async (req, res) => {
 	}
 });
 
-blogRouter.patch("/edit", userAuth, async (req, res) => {
+blogRouter.patch("/edit/:blogId", userAuth, async (req, res) => {
 	try {
-		const blogId = req.body._id;
+		const blogId = req.params.blogId;
 
 		const blog = await Blog.findById(blogId);
 

@@ -36,7 +36,7 @@ authRouter.post("/login", async (req, res) => {
 			throw new Error("Invalid credentials");
 		}
 		const passwordHash = user.password;
-		const isPasswordValid = bcrypt.compare(password, passwordHash);
+		const isPasswordValid = await bcrypt.compare(password, passwordHash);
 
 		if (isPasswordValid) {
 			//create jwt token
