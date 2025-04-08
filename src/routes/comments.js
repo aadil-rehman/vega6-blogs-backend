@@ -30,4 +30,19 @@ commentsRouter.post("/create/:blogId", userAuth, async (req, res) => {
 	}
 });
 
+commentsRouter.get("/view/:blogId", userAuth, async (req, res) => {
+	try {
+		const blogId = req.params.blogId;
+
+		const comments = await Comments.find({ blogId: blogId }).populate(
+			"fromUserId",
+			"profileImage"
+		);
+
+		res.json({ message: "Comment fetched successfully!", data: comments });
+	} catch (err) {
+		res.status(400).json({ error: err.message });
+	}
+});
+
 module.exports = commentsRouter;

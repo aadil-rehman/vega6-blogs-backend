@@ -37,7 +37,10 @@ blogRouter.get("/view/:blogId", userAuth, async (req, res) => {
 blogRouter.get("/list", userAuth, async (req, res) => {
 	try {
 		const loggedInUser = req.user;
-		const blogs = await Blog.find({ authorId: loggedInUser._id });
+		const blogs = await Blog.find({ authorId: loggedInUser._id }).populate(
+			"authorId",
+			"firstName lastName"
+		);
 
 		res.json({ message: "Blogs fecthed successfully!", data: blogs });
 	} catch (err) {
@@ -49,7 +52,9 @@ blogRouter.get("/feed", userAuth, async (req, res) => {
 	try {
 		const loggedInUser = req.user;
 
-		const blogs = await Blog.find({ authorId: { $ne: loggedInUser._id } });
+		const blogs = await Blog.find({
+			authorId: { $ne: loggedInUser._id },
+		}).populate("authorId", "firstName lastName");
 
 		res.json({ message: "Blogs fecthed successfully!", data: blogs });
 	} catch (err) {

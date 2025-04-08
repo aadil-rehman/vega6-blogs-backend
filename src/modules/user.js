@@ -27,7 +27,11 @@ const userSchema = new mongoose.Schema(
 		},
 		profileImage: {
 			public_id: String,
-			url: String,
+			url: {
+				type: String,
+				default:
+					"https://www.inklar.com/wp-content/uploads/2020/05/dummy_user-370x300-1.png",
+			},
 		},
 	},
 	{ timestamps: true }
