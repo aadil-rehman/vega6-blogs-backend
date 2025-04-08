@@ -31,6 +31,6 @@ mongoDBconnect()
 			console.log(`Server listening on Port...`);
 		});
 	})
-	.catch(() => {
-		console.log("Database cannot be connected");
+	.catch((err) => {
+		console.error("Database cannot be connected", err.message);
 	});
