@@ -28,8 +28,8 @@ app.use("/comments", commentsRouter);
 mongoDBconnect()
 	.then(() => {
 		console.log("Database connection establised.");
-		app.listen(PORT, () => {
-			console.log(`Server listening on Port ${PORT}`);
+		app.listen(process.env.PORT || 5000, () => {
+			console.log(`Server listening on Port...`);
 		});
 	})
 	.catch(() => {
