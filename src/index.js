@@ -19,15 +19,17 @@ app.use(cookieParser());
 const authRouter = require("./routes/auth");
 const blogRouter = require("./routes/blogs");
 const commentsRouter = require("./routes/comments");
+const likesRouter = require("./routes/likes");
 
 app.use("/", authRouter);
 app.use("/blog", blogRouter);
 app.use("/comments", commentsRouter);
+app.use("/likes", likesRouter);
 
 mongoDBconnect()
 	.then(() => {
 		console.log("Database connection establised.");
-		app.listen(process.env.PORT || 5000, () => {
+		app.listen(process.env.PORT || 3000, () => {
 			console.log(`Server listening on Port...`);
 		});
 	})
