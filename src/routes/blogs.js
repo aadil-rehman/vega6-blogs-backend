@@ -1,6 +1,7 @@
 const express = require("express");
 const Blog = require("../modules/blog");
 const userAuth = require("../middlewares/auth");
+const Likes = require("../modules/likes");
 
 const blogRouter = express.Router();
 
@@ -65,7 +66,22 @@ blogRouter.get("/feed", userAuth, async (req, res) => {
 			authorId: { $ne: loggedInUser._id },
 		}).populate("authorId", "firstName lastName");
 
-		res.json({ message: "Blogs fecthed successfully!", data: blogs });
+		// Fetch likes count for each blog in parallel
+		const blogsWithLikes = await Promise.all(
+			blogs.map(async (blog) => {
+				const numberOfLikes = await Likes.countDocuments({
+					blogId: blog._id,
+					likeStatus: "like",
+				});
+
+				return {
+					...blog.toObject(), // Convert Mongoose Document to plain JS object
+					numberOfLikes,
+				};
+			})
+		);
+
+		res.json({ message: "Blogs fecthed successfully!", data: blogsWithLikes });
 	} catch (err) {
 		res.status(400).json({ Error: err.message });
 	}
@@ -107,7 +123,7 @@ blogRouter.delete("/delete/:id", userAuth, async (req, res) => {
 		}
 
 		await Blog.findByIdAndDelete(blogId);
-		res.json({ message: "Blog deleted successfully!" });
+		res.json({ status: 1, message: "Blog deleted successfully!" });
 	} catch (err) {
 		res.status(400).json({ Error: err.message });
 	}

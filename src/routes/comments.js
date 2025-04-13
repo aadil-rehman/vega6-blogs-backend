@@ -36,7 +36,7 @@ commentsRouter.get("/view/:blogId", userAuth, async (req, res) => {
 
 		const comments = await Comments.find({ blogId: blogId }).populate(
 			"fromUserId",
-			"profileImage"
+			"profileImage firstName lastName"
 		);
 
 		res.json({ message: "Comment fetched successfully!", data: comments });
