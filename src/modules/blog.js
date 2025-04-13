@@ -14,7 +14,11 @@ const blogSchema = new mongoose.Schema(
 		},
 		blogImage: {
 			public_id: String,
-			url: String,
+			url: {
+				type: String,
+				default:
+					"https://th.bing.com/th/id/OIP.E13JkGWNBoKw9e1-WatrCgHaD_?rs=1&pid=ImgDetMain",
+			},
 		},
 		authorId: {
 			type: mongoose.Schema.Types.ObjectId,

@@ -11,7 +11,13 @@ blogRouter.post("/create", userAuth, async (req, res) => {
 		const blog = new Blog({
 			blogTitle,
 			blogDescription,
-			blogImage,
+			blogImage:
+				blogImage.url === ""
+					? {
+							...blogImage,
+							url: "https://i0.wp.com/thebittersweetlife.com/wp-content/uploads/2018/04/blog-2.jpg?fit=1918%2C1080&ssl=1",
+					  }
+					: blogImage,
 			authorId: req.user._id,
 		});
 

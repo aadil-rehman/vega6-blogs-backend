@@ -48,7 +48,12 @@ likesRouter.post("/create/:blogId", userAuth, async (req, res) => {
 likesRouter.get("/view/:blogId", userAuth, async (req, res) => {
 	try {
 		const blogId = req.params.blogId;
-		const likes = await Likes.find({ blogId: blogId, likeStatus: "like" });
+		const likes = await Likes.find({
+			blogId: blogId,
+			likeStatus: "like",
+		})
+			.select("fromUserId")
+			.populate("fromUserId", "firstName lastName");
 		const numberOfLikes = likes ? likes.length : 0;
 
 		const loggedInUser = req.user;
@@ -60,7 +65,8 @@ likesRouter.get("/view/:blogId", userAuth, async (req, res) => {
 		res.json({
 			message: "Likes fetched successfully!",
 			numberOfLikes: numberOfLikes,
-			like: like,
+			likes: likes,
+			currlikeObj: like,
 		});
 	} catch (err) {
 		res.status(400).json({ error: err.message });
