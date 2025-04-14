@@ -10,7 +10,7 @@ const blogSchema = new mongoose.Schema(
 		blogDescription: {
 			type: String,
 			required: true,
-			maxLength: 1000,
+			maxLength: 2000,
 		},
 		blogImage: {
 			public_id: String,

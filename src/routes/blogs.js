@@ -2,6 +2,7 @@ const express = require("express");
 const Blog = require("../modules/blog");
 const userAuth = require("../middlewares/auth");
 const Likes = require("../modules/likes");
+const Comments = require("../modules/comments");
 
 const blogRouter = express.Router();
 
@@ -121,6 +122,11 @@ blogRouter.delete("/delete/:id", userAuth, async (req, res) => {
 				.status(403)
 				.json({ error: "Unaithorized to delete this blog" });
 		}
+		// Delete all likes associated with the blog
+		await Likes.deleteMany({ blogId: blogId });
+
+		// Delete all comments associated with the blog
+		await Comments.deleteMany({ blogId: blogId });
 
 		await Blog.findByIdAndDelete(blogId);
 		res.json({ status: 1, message: "Blog deleted successfully!" });

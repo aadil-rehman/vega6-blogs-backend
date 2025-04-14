@@ -20,7 +20,7 @@ authRouter.post("/signup", async (req, res) => {
 			profileImage,
 		});
 		await user.save();
-		res.send("User added successfully");
+		res.json({ status: 1, message: "User created successfully!", data: user });
 	} catch (err) {
 		res.status(400).send("Error in savibg the user:" + err.message);
 	}

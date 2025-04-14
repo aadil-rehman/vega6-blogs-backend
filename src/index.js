@@ -20,11 +20,13 @@ const authRouter = require("./routes/auth");
 const blogRouter = require("./routes/blogs");
 const commentsRouter = require("./routes/comments");
 const likesRouter = require("./routes/likes");
+const uploadRouter = require("./routes/upload");
 
 app.use("/", authRouter);
 app.use("/blog", blogRouter);
 app.use("/comments", commentsRouter);
 app.use("/likes", likesRouter);
+app.use("/image", uploadRouter);
 
 mongoDBconnect()
 	.then(() => {
