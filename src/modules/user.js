@@ -33,9 +33,22 @@ const userSchema = new mongoose.Schema(
 					"https://www.inklar.com/wp-content/uploads/2020/05/dummy_user-370x300-1.png",
 			},
 		},
+		age: {
+			type: Number,
+			min: 5,
+			max: 100,
+		},
+		gender: {
+			type: String,
+			validate(value) {
+				if (!["male", "female", "other"].includes(value)) {
+					throw new Error("Gender data is not valid");
+				}
+			},
+		},
 	},
 	{ timestamps: true }
 );
 
-const User = mongoose.model("User", userSchema);
+User = mongoose.models.User || mongoose.model("User", userSchema);
 module.exports = User;

@@ -5,12 +5,32 @@ const fs = require("fs");
 
 const uploadRouter = express.Router();
 
-uploadRouter.post("/upload", upload.single("image"), async (req, res) => {
+uploadRouter.post(
+	"/upload/profile",
+	upload.single("image"),
+	async (req, res) => {
+		try {
+			const result = await cloudinary.uploader.upload(req.file.path, {
+				folder: "user_profile",
+			});
+
+			fs.unlinkSync(req.file.path);
+
+			res.status(200).json({
+				public_id: result.public_id,
+				url: result.secure_url,
+			});
+		} catch (err) {
+			res.status(500).json({ error: err.message });
+		}
+	}
+);
+
+uploadRouter.post("/upload/blog", upload.single("image"), async (req, res) => {
 	try {
 		const result = await cloudinary.uploader.upload(req.file.path, {
-			folder: "user_profile",
+			folder: "blog_images",
 		});
-
 		fs.unlinkSync(req.file.path);
 
 		res.status(200).json({

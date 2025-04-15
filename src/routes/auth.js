@@ -1,8 +1,11 @@
 const express = require("express");
-const User = require("../modules/user");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const userAuth = require("../middlewares/auth");
+const Blog = require("../modules/blog");
+const Likes = require("../modules/likes");
+const Comments = require("../modules/comments");
+const User = require("../modules/User");
 
 const authRouter = express.Router();
 
@@ -56,15 +59,6 @@ authRouter.post("/login", async (req, res) => {
 	}
 });
 
-authRouter.get("/profile", userAuth, async (req, res) => {
-	try {
-		const loggedInUser = req.user;
-		res.json({ message: "User fetched successfully!", data: loggedInUser });
-	} catch (err) {
-		res.status(400).json({ error: err.message });
-	}
-});
-
 authRouter.post("/logout", async (req, res) => {
 	try {
 		res
@@ -72,6 +66,46 @@ authRouter.post("/logout", async (req, res) => {
 				expires: new Date(Date.now()),
 			})
 			.send("Logout successfull!");
+	} catch (err) {
+		res.status(400).json({ error: err.message });
+	}
+});
+
+authRouter.delete("/account/delete", userAuth, async (req, res) => {
+	try {
+		const loggedInUser = req.user;
+
+		const inputPassword = req.body.password;
+
+		const isValidPassword = await bcrypt.compare(
+			inputPassword,
+			loggedInUser.password
+		);
+
+		if (!isValidPassword) {
+			throw new Error("Invalid password!");
+		}
+
+		const allBlogsOfUser = await Blog.find({ authorId: loggedInUser._id });
+
+		await Promise.all(
+			allBlogsOfUser.map(async (blog) => {
+				await Likes.deleteMany({ blogId: blog._id });
+				await Comments.deleteMany({ blogId: blog._id });
+				await Blog.findByIdAndDelete(blog._id);
+			})
+		);
+
+		await User.findByIdAndDelete(loggedInUser._id);
+
+		res
+			.cookie("token", null, {
+				expires: new Date(Date.now()),
+			})
+			.json({
+				status: 1,
+				message: "User account deleted successfully!",
+			});
 	} catch (err) {
 		res.status(400).json({ error: err.message });
 	}
